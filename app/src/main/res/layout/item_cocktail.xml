@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Imagen del Cóctel -->
+        <ImageView
+            android:id="@+id/ivCocktailImage"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/imagen_del_c_ctel"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Sombra degradada para dar contraste al texto -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/grey"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Nombre del Cóctel -->
+        <TextView
+            android:id="@+id/tvCocktailName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

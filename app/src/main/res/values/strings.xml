@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TheCocktailDBAPI</string>
+    <string name="imagen_del_c_ctel">Imagen del cóctel</string>
+    <string name="buscar_c_ctel_ej_margarita">Buscar cóctel (ej. Margarita)</string>
+    <string name="ingredientes">Ingredientes</string>
+    <string name="por_nombre">Por Nombre</string>
+    <string name="por_ingrediente">Por Ingrediente</string>
+</resources>
