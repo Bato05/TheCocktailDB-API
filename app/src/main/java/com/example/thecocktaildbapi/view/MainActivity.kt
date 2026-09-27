@@ -68,14 +68,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupSearch() {
-        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
+        // 1. Observar la lista de ingredientes y poblar el Spinner
+        viewModel.ingredientsList.observe(this) { ingredients ->
+            val spinnerAdapter = android.widget.ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                ingredients
+            )
+            binding.spinnerIngredients.adapter = spinnerAdapter
+        }
+
+        // 2. Escuchar la selección del Spinner
+        binding.spinnerIngredients.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedIngredient = parent.getItemAtPosition(position).toString()
+
+                // Evitar buscar cuando se selecciona el texto por defecto
+                if (selectedIngredient != "Selecciona un ingrediente") {
+                    viewModel.filterCocktailsByIngredient(selectedIngredient)
+                }
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>) {}
+        }
+
+        // 3. Mantener la búsqueda por nombre en la barra de texto
+        binding.etSearch.setOnEditorActionListener { v, _, _ ->
             val query = v.text.toString().trim()
             if (query.isNotEmpty()) {
-                if (binding.rbByName.isChecked) {
-                    viewModel.searchCocktailsByName(query)
-                } else {
-                    viewModel.filterCocktailsByIngredient(query)
-                }
+                viewModel.searchCocktailsByName(query)
+                // Reiniciar el spinner a la posición 0 ("Selecciona un ingrediente") para evitar que siga filtrando
+                binding.spinnerIngredients.setSelection(0)
             }
             true
         }

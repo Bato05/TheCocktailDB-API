@@ -5,7 +5,7 @@
     <!--
     Permisos de Red para poder conectarse a los servidores de TheCocktailDB
     Sin este permiso, el sistema operativo bloqueará cualquier intento de Retrofit
-    o Picasso por descargar datos o imágenes, resultando en un crasheo o un fallo silencioso.
+    o Picasso por descargar datos o imágenes, resultando en un crasheo o un fallo.
     -->
     <uses-permission android:name="android.permission.INTERNET" />
 

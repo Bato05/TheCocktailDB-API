@@ -13,11 +13,10 @@ class CocktailAdapter(
     private val onItemClick: (Cocktail) -> Unit
 ) : RecyclerView.Adapter<CocktailAdapter.CocktailViewHolder>() {
 
-    // 1. El ViewHolder ahora recibe el Binding generado en lugar de un View crudo
     class CocktailViewHolder(val binding: ItemCocktailBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CocktailViewHolder {
-        // 2. Inflamos la vista utilizando el método inflate del Binding
+        // Inflamos la vista utilizando la función inflate del Binding
         val binding = ItemCocktailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CocktailViewHolder(binding)
     }
@@ -25,16 +24,15 @@ class CocktailAdapter(
     override fun onBindViewHolder(holder: CocktailViewHolder, position: Int) {
         val cocktail = cocktailList[position]
 
-        // 3. Accedemos a las vistas directamente a través de la propiedad 'binding'
         holder.binding.tvCocktailName.text = cocktail.strDrink
 
         Picasso.get()
-            .load(cocktail.strDrinkThumb)
-            .placeholder(R.mipmap.ic_launcher) // Imagen de carga
-            .error(R.mipmap.ic_launcher_round) // Imagen de error
-            .into(holder.binding.ivCocktailImage)
+            .load(cocktail.strDrinkThumb) // Busca/descargar la Imagen del Cocktail
+            .placeholder(R.mipmap.ic_launcher) // Mientras espera, Imagen de carga
+            .error(R.mipmap.ic_launcher_round) // En caso de un error, Imagen de error
+            .into(holder.binding.ivCocktailImage) // Setea la Imagen del Cocktail
 
-        // El clic en el elemento completo se sigue manejando sobre la raíz (itemView o binding.root)
+        // Al seleccionar un Cocktail, se capturan los datos de dicho Cocktail para el detalle
         holder.itemView.setOnClickListener {
             onItemClick(cocktail)
         }
@@ -42,7 +40,7 @@ class CocktailAdapter(
 
     override fun getItemCount(): Int = cocktailList.size
 
-    // Método para actualizar la lista desde el Activity/Fragment
+    // Función para actualizar la lista
     fun updateData(newList: List<Cocktail>) {
         cocktailList = newList
         notifyDataSetChanged()

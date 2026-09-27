@@ -21,4 +21,8 @@ class CocktailRepository {
     suspend fun getDetails(id: String): Response<CocktailResponse> {
         return api.getCocktailDetailsById(id)
     }
+
+    suspend fun getAllIngredients(): Response<CocktailResponse> {
+        return api.getAllIngredients()
+    }
 }

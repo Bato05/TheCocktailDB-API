@@ -6,18 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.thecocktaildbapi.databinding.FragmentDetailBinding
 import com.example.thecocktaildbapi.model.Cocktail
 import com.example.thecocktaildbapi.viewmodel.CocktailViewModel
 import com.squareup.picasso.Picasso
+import kotlin.getValue
 
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
+
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: CocktailViewModel
+    /*
+     Referencia al ViewModel compartido.
+     Obtiene la información del elemento seleccionado
+     sin necesidad de pasar argumentos (Bundles).
+     */
+    private val viewModel: CocktailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,10 +39,11 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Inicializar ViewModel
-        viewModel = ViewModelProvider(this)[CocktailViewModel::class.java]
-
-        // 2. Observar los datos del cóctel seleccionado
+        // Observar los datos del cóctel seleccionado
+        /*
+        Se suscribe al viewmodel
+        Extrae el nombre y las Intrucciones del cocktail
+        */
         viewModel.cocktailDetail.observe(viewLifecycleOwner) { cocktail ->
             if (cocktail != null) {
                 binding.tvCocktailName.text = cocktail.strDrink
@@ -46,7 +55,7 @@ class DetailFragment : Fragment() {
             }
         }
 
-        // Observar errores o estado de carga
+        // Observa errores o error de estado de carga
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             if (error.isNotEmpty()) {
                 Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
@@ -98,6 +107,7 @@ class DetailFragment : Fragment() {
             .joinToString("\n")
     }
 
+    //  Limpieza del binding para evitar fugas de memoria.
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -14,7 +14,11 @@ interface CocktailApiService {
     @GET("api/json/v1/1/filter.php")
     suspend fun filterCocktailsByIngredient(@Query("i") ingredient: String): Response<CocktailResponse>
     
-    // Para buscar el detalle por ID (útil para la pantalla de detalle)
+    // Para buscar el detalle por ID
     @GET("api/json/v1/1/lookup.php")
     suspend fun getCocktailDetailsById(@Query("i") id: String): Response<CocktailResponse>
+
+    // Obtener todos los ingredientes para el Spinner
+    @GET("api/json/v1/1/list.php?i=list")
+    suspend fun getAllIngredients(): Response<CocktailResponse>
 }

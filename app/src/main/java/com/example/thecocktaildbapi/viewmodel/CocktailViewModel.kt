@@ -10,20 +10,21 @@ import kotlinx.coroutines.launch
 
 class CocktailViewModel : ViewModel() {
 
-    // Instanciamos el repositorio que ya creaste
+    // Instanciamos el repositorio
     private val repository = CocktailRepository()
 
     // LiveData para manejar el estado de la lista de cócteles
     private val _cocktails = MutableLiveData<List<Cocktail>>()
     val cocktails: LiveData<List<Cocktail>> get() = _cocktails
 
-    // LiveData para manejar errores (Puntos Extra en tu examen por manejo de red)
+    // LiveData para manejar errores
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
     // LiveData para el estado de carga (ProgressBar)
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
+
 
     fun searchCocktailsByName(query: String) {
         _isLoading.value = true
@@ -64,6 +65,7 @@ class CocktailViewModel : ViewModel() {
         }
     }
 
+
     // LiveData para el cóctel seleccionado
     private val _cocktailDetail = MutableLiveData<Cocktail?>()
     val cocktailDetail: LiveData<Cocktail?> get() = _cocktailDetail
@@ -83,6 +85,36 @@ class CocktailViewModel : ViewModel() {
                 _errorMessage.postValue("Error de conexión. Verifica tu internet.")
             } finally {
                 _isLoading.postValue(false)
+            }
+        }
+    }
+
+
+
+    // LiveData para el Spinner
+    private val _ingredientsList = MutableLiveData<List<String>>()
+    val ingredientsList: LiveData<List<String>> get() = _ingredientsList
+
+    init {
+        fetchAllIngredients()
+    }
+
+    private fun fetchAllIngredients() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getAllIngredients()
+                if (response.isSuccessful) {
+                    // Extraemos solo el texto de strIngredient1, ignorando nulos, y lo ordenamos alfabéticamente
+                    val ingredients = response.body()?.drinks?.mapNotNull { it.strIngredient1 }?.sorted() ?: emptyList()
+
+                    // Agregamos una opción por defecto al inicio
+                    val listWithHint = mutableListOf("Selecciona un ingrediente")
+                    listWithHint.addAll(ingredients)
+
+                    _ingredientsList.postValue(listWithHint)
+                }
+            } catch (e: Exception) {
+                _errorMessage.postValue("Error de conexión. Verifica tu internet.")
             }
         }
     }
