@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.thecocktaildbapi.adapter.CocktailAdapter
 import com.example.thecocktaildbapi.databinding.ActivityMainBinding
@@ -14,7 +14,7 @@ import com.example.thecocktaildbapi.viewmodel.CocktailViewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: CocktailViewModel
+    private val viewModel: CocktailViewModel by viewModels()
     private lateinit var adapter: CocktailAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,16 +24,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 2. Inicializar ViewModel
-        viewModel = ViewModelProvider(this)[CocktailViewModel::class.java]
-
-        // 3. Configurar RecyclerView y Adapter
+        // 2. Configurar RecyclerView y Adapter
         setupRecyclerView()
 
-        // 4. Observar los LiveData del ViewModel
+        // 3. Observar los LiveData del ViewModel
         observeViewModel()
 
-        // 5. Configurar el buscador
+        // 4. Configurar el buscador
         setupSearch()
     }
 

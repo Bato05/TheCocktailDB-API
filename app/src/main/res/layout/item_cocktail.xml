@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground">
 
         <!-- Imagen del Cóctel -->
         <ImageView
@@ -25,7 +26,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/grey"
+            android:background="@drawable/scrim_gradient"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Nombre del Cóctel -->
@@ -37,6 +38,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
             android:ellipsize="end"
             android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent" />

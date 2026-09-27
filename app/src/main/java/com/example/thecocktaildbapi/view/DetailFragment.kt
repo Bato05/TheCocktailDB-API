@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.thecocktaildbapi.databinding.FragmentDetailBinding
 import com.example.thecocktaildbapi.model.Cocktail
 import com.example.thecocktaildbapi.viewmodel.CocktailViewModel
@@ -20,12 +19,7 @@ class DetailFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    /*
-     Referencia al ViewModel compartido.
-     Obtiene la información del elemento seleccionado
-     sin necesidad de pasar argumentos (Bundles).
-     */
-    private val viewModel: CocktailViewModel by activityViewModels()
+    private val viewModel: CocktailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,10 +56,12 @@ class DetailFragment : Fragment() {
             }
         }
 
+        // arguments es el Bundle que se le pasa a un Fragment
         val cocktailId = arguments?.getString("COCKTAIL_ID")
 
         if (cocktailId != null) {
-            // conectar al ViewModel para cargar los detalles
+            // conectar al ViewModel para cargar los detalles de ese cocktail
+            // No llama a la API
             viewModel.fetchCocktailDetails(cocktailId)
         }
     }
@@ -90,21 +86,11 @@ class DetailFragment : Fragment() {
         )
 
         return ingredientsList
-            .mapNotNull { (ingredient, measure) ->
-                val trimmedIngredient = ingredient?.trim()
-                val trimmedMeasure = measure?.trim()
-
-                if (!trimmedIngredient.isNullOrEmpty()) {
-                    if (!trimmedMeasure.isNullOrEmpty()) {
-                        "• $trimmedMeasure $trimmedIngredient"
-                    } else {
-                        "• $trimmedIngredient"
-                    }
-                } else {
-                    null
-                }
+            .filter { !it.first.isNullOrBlank() }
+            .joinToString("\n") { (ingredient, measure) ->
+                val meas = if (!measure.isNullOrBlank()) measure.trim() else ""
+                "• $meas ${ingredient!!.trim()}".trim()
             }
-            .joinToString("\n")
     }
 
     //  Limpieza del binding para evitar fugas de memoria.
